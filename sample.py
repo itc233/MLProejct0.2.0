@@ -23,9 +23,9 @@ Xts, yts = readDataTest(tsx_path, tsy_path)
 #Xts = X[len(ytr):, :]
 #np.save('data/train', np.column_stack([Xtr, ytr]))
 #np.save('data/test', np.column_stack([Xts, yts]))
-
+Xtr = np.column_stack([Xtr, Xtr**2])
 Xytr = np.column_stack([Xtr, ytr])
-Xytr = rejectOutlier(Xytr, 3)
+Xytr = rejectOutlier(Xytr, 10)
 Xtr = Xytr[:, :-1]
 ytr = Xytr[:, -1]
 #X = np.concatenate((Xtr, Xts), axis = 0)
@@ -33,11 +33,12 @@ ytr = Xytr[:, -1]
 xm = np.mean(Xtr, axis = 0)
 xstd = np.std(Xtr, axis = 0)
 Xytr[:,:-1] = (Xytr[:, :-1]-xm)/xstd#X[:len(ytr), :]
+Xts = np.column_stack([Xts, Xts**2])
 Xts = (Xts-xm)/xstd#X[len(ytr):, :]
 np.save('trainDataForGA', Xytr)
 np.save('testDataForGA', np.column_stack([Xts, yts]))
 
-(sample_result, sample_genes, sample_scores) = GA(Xytr, linear_model.Lasso(alpha = 0.1), feval, iter=300, r_sample=0.5, r_crossover=0.5, r_vary=0.0, r_keep_best = 0.1, popsize = 300, pTrain = 0.8, nfold = 5, verbose = True).select()
+(sample_result, sample_genes, sample_scores) = GA(Xytr, linear_model.Lasso(alpha = 0.01), feval, iter=300, r_sample=0.5, r_crossover=0.8, r_vary=0.0, r_keep_best = 0.1, popsize = 150, pTrain = 0.8, nfold = 5, verbose = True).select()
 
 print("sample_result:\n", sample_result)
 print("sample_genes:\n", sample_genes)
