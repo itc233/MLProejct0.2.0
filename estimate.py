@@ -12,8 +12,10 @@ import csv
 tr_path = 'trainDataForGA.npy'
 ts_path = 'testDataForGA.npy'
 sample_genes = np.load('trained_genes.npy')
-
+sample_genes = [True] * len(sample_genes)
 regr = linear_model.Lasso(alpha = 0.01)#LinearRegression()
+
+#regr = linear_model.LinearRegression()
 
 Xytr = np.load(tr_path)#readDataTrain(tr_path)
 Xyts = np.load(ts_path)#readDataTrain(tr_path)
